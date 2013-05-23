@@ -219,7 +219,7 @@ a:hover {
   width: 100%;
 }
 */
-#library {
+#library, #addthisloaders, #addthisblocks {
   padding: 2px;
   right: 0;
   margin-left: 5px;
