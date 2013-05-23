@@ -1,7 +1,7 @@
 //= require "addthisloaders"
 
 var $loader = $('#addthisloaders'),
-    groups = {};
+    loadergroups = {};
 
 $loader.bind('init', function () {
   var i = 0,
@@ -14,7 +14,7 @@ $loader.bind('init', function () {
     lcGroup = '';
 
   // reset
-  groups = {};
+  loadergroups = {};
   $loader.empty();
 
   for (i = 0; i < addthisloaders.length, loader = addthisloaders[i]; i++) {
@@ -22,10 +22,10 @@ $loader.bind('init', function () {
     lcGroup = groupLabel.toLowerCase().replace(/[^a-z0-9]/ig, '');
     if (groupOrder.indexOf(lcGroup) === -1) {
       group = { label: groupLabel, addthisloaders: [], key: lcGroup };
-      groups[lcGroup] = group;
+      loadergroups[lcGroup] = group;
       groupOrder.push(lcGroup);
     } else {
-      group = groups[lcGroup];
+      group = loadergroups[lcGroup];
     }
 
     group.addthisloaders.push(loader);
@@ -34,7 +34,7 @@ $loader.bind('init', function () {
   var html = ['<option value="none">None</option>'];
 
   for (i = 0; i < groupOrder.length; i++) {
-    group = groups[groupOrder[i]];
+    group = loadergroups[groupOrder[i]];
     html.push('<option value="" data-group="' + group.label + '" class="heading">-------------</option>');
 
     for (j = 0; j < group.addthisloaders.length, loader = group.addthisloaders[j]; j++) {
@@ -50,10 +50,12 @@ $loader.bind('change', function () {
   if (!this.value) return;
 
   var selected = this.value.split(':'),
-      group = groups[selected[0]],
-      loader = group.addthisloaders[selected[1]];
+      group = loadergroups[selected[0]],
+      loader = group.addthisloaders[selected[1]],
 
-  insertATResources(loader.url, true);
+      pubid = window.prompt('Please enter a pubid', 'atblog');
+
+  insertATResources(loader.url + (pubid ? '#pubid=' + pubid : ''), true, true);
 }).on('click', function () {
   analytics.loaderMenu();
 });
@@ -62,7 +64,7 @@ $loader.bind('change', function () {
 
 
 var $block = $('#addthisblocks'),
-    groups = {};
+    blockgroups = {};
 
 $block.bind('init', function () {
   var i = 0,
@@ -75,7 +77,7 @@ $block.bind('init', function () {
     lcGroup = '';
 
   // reset
-  groups = {};
+  blockgroups = {};
   $block.empty();
 
   for (i = 0; i < addthisblocks.length, block = addthisblocks[i]; i++) {
@@ -83,10 +85,10 @@ $block.bind('init', function () {
     lcGroup = groupLabel.toLowerCase().replace(/[^a-z0-9]/ig, '');
     if (groupOrder.indexOf(lcGroup) === -1) {
       group = { label: groupLabel, addthisblocks: [], key: lcGroup };
-      groups[lcGroup] = group;
+      blockgroups[lcGroup] = group;
       groupOrder.push(lcGroup);
     } else {
-      group = groups[lcGroup];
+      group = blockgroups[lcGroup];
     }
 
     group.addthisblocks.push(block);
@@ -95,7 +97,7 @@ $block.bind('init', function () {
   var html = ['<option value="none">None</option>'];
 
   for (i = 0; i < groupOrder.length; i++) {
-    group = groups[groupOrder[i]];
+    group = blockgroups[groupOrder[i]];
     html.push('<option value="" data-group="' + group.label + '" class="heading">-------------</option>');
 
     for (j = 0; j < group.addthisblocks.length, block = group.addthisblocks[j]; j++) {
@@ -111,10 +113,10 @@ $block.bind('change', function () {
   if (!this.value) return;
 
   var selected = this.value.split(':'),
-      group = groups[selected[0]],
+      group = blockgroups[selected[0]],
       block = group.addthisblocks[selected[1]];
 
-  insertATResources(makeATBlocks(block.html), false);
+  insertATResources(makeATBlocks(block.html), false, false);
 }).on('click', function () {
   analytics.blockMenu();
 });
@@ -135,7 +137,7 @@ function makeATBlocks(html) {
 }
 
 
-function insertATResources(urls, bottom) {
+function insertATResources(urls, script, bottom) {
   if (!$.isArray(urls)) {
     urls = [urls];
   }
@@ -167,7 +169,11 @@ function insertATResources(urls, bottom) {
       state.add--;
     }
 
-    html.push('<' + 'script src="' + url + '"><' + '/script>');
+    if (script) {
+      html.push('<' + 'script src="' + url + '"><' + '/script>');
+    } else {
+      html.push(url);
+    }
 
     state.add++;
   }
