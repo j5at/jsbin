@@ -2,6 +2,14 @@
 
 This fork adds script and html insertion for quickly creating tests of AddThis social plugins.
 
+## How To Use It!
+
+Clone the repo into a convenient location on your computer.  For OS X: from the command line, run installservice.sh, located inside of the service directory.  Edit the file /usr/local/etc/jsbin.config.local.json to change url.host parameter to the shared computer name of your development box (so you can share jsbin 'pages' with your team).  Locate this from Apple Menu > System Preferences ... then Sharing preference pane.
+
+Once installed, navigate to the hostname set in the config file, then use as normally use JSBin.  Additional dropdowns for AT Loaders, AT Blocks, and AT Layers are available for your developing pleasure.
+
+Request write privileges to this repo so that you can easily add your own items to the AT menus.
+
 # JS Bin
 
 JS Bin is an open source collaborative web development debugging tool.
