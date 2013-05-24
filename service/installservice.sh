@@ -15,3 +15,5 @@ launchctl load /Library/LaunchDaemons/com.jsbin.plist
 echo "JSBin server should be started on port 30303"
 echo "edit /usr/local/etc/jsbin.config.local.json to set configuration properties"
 echo "particularly, make sure url.host is set to the hostname you'll use to access jsbin"
+echo "open Apple > System Preferences ... and then Sharing preference pane to get the"
+echo "hostname to use which will allow sharing jsbin 'pages'."

@@ -122,6 +122,68 @@ $block.bind('change', function () {
 });
 
 
+
+var $layer = $('#addthislayers'),
+    layergroups = {};
+
+$layer.bind('init', function () {
+  var i = 0,
+    j = 0,
+    k = 0,
+    layer = {},
+    groupOrder = [],
+    group = {},
+    groupLabel = '',
+    lcGroup = '';
+
+  // reset
+  layergroups = {};
+  $layer.empty();
+
+  for (i = 0; i < addthislayers.length, layer = addthislayers[i]; i++) {
+    groupLabel = layer.group || 'Other';
+    lcGroup = groupLabel.toLowerCase().replace(/[^a-z0-9]/ig, '');
+    if (groupOrder.indexOf(lcGroup) === -1) {
+      group = { label: groupLabel, addthislayers: [], key: lcGroup };
+      layergroups[lcGroup] = group;
+      groupOrder.push(lcGroup);
+    } else {
+      group = layergroups[lcGroup];
+    }
+
+    group.addthislayers.push(layer);
+  }
+
+  var html = ['<option value="none">None</option>'];
+
+  for (i = 0; i < groupOrder.length; i++) {
+    group = layergroups[groupOrder[i]];
+    html.push('<option value="" data-group="' + group.label + '" class="heading">-------------</option>');
+
+    for (j = 0; j < group.addthislayers.length, layer = group.addthislayers[j]; j++) {
+      html.push('<option value="' + group.key + ':' + j + '">' + layer.label + '</option>');
+    }
+  }
+
+  $layer.html( html.join('') );
+}).trigger('init');
+
+
+$layer.bind('change', function () {
+  if (!this.value) return;
+
+  var selected = this.value.split(':'),
+      group = layergroups[selected[0]],
+      layer = group.addthislayers[selected[1]];
+
+  insertATResources(makeATScript(layer.src), false, true);
+}).on('click', function () {
+  analytics.layerMenu();
+});
+
+
+
+
 // convert at shorthand elements to long-form HTML
 function makeATBlocks(html) {
   var index = 0, chunk, pos, result = [];
@@ -134,6 +196,10 @@ function makeATBlocks(html) {
     }
   }
   return result.join('\n');
+}
+
+function makeATScript(src) {
+  return '<script>\n' + src + '\n</script>';
 }
 
 

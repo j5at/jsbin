@@ -2,7 +2,7 @@ div {
   zoom: 1;
 }
 
-#library, #addthisloaders, #addthisblocks {
+.editor-dd {
   filter: alpha(opacity=0);
   -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
 }

@@ -7,19 +7,30 @@ var addthiselements = {
   "<bp>": '<a class="addthis_button_preferred"></a>',
   "<b:f>": '<a class="addthis_button_facebook"></a>',
   "<b:t>": '<a class="addthis_button_twitter"></a>',
-  "<b:li>": '<a class="addthis_button_linkedin"></a>'
+  "<b:li>": '<a class="addthis_button_linkedin"></a>',
+  "<s>": '<script>\n',
+  "</s>": '\n</script>'
 };
 
 var addthisblocks = [
-    {
-        "html": "<tb><bp><bp><bp><bp><bc></tb>",
-        "label": "toolbox, preferred",
-        "group": "toolboxes"
-    }
+  {
+      "html": "<tb><bp><bp><bp><bp><bc></tb>",
+      "label": "toolbox, preferred",
+      "group": "toolboxes"
+  }
+];
+
+var addthislayers = [
+  {
+    "src": 'addthis.dynamic.initialize();',
+    "label": "default",
+    "group": "smart layers"
+  }
 ];
 
 window.addthisblocks = addthisblocks; // expose a command line API
 window.addthiselements = addthiselements;
+window.addthislayers = addthislayers;
 
 addthisblocks.userSpecified = JSON.parse(localStorage.getItem('addthisblocks') || "[]");
 for (var i = 0; i < addthisblocks.userSpecified.length; i++) {
@@ -59,6 +70,41 @@ addthisblocks.clear = function () {
   }
   // force a refresh?
   $('#addthisblocks').trigger('init');
+};
+
+addthislayers.add = function (widget) {
+  // Extract each script from a list (as documented) or use the default way
+  if (widget.scripts) {
+    widget.scripts.forEach(function (script) {
+      script.group = widget.text;
+      script.label = script.text;
+      this.userSpecified.push(script);
+      addthislayers.push(script);
+    }.bind(this));
+  } else {
+    // Adding a widget according to the above schema
+    widget.group = 'Custom';
+    this.userSpecified.push(widget);
+    addthislayers.push(widget);
+  }
+  try {
+    localStorage.setItem('addthislayers', JSON.stringify(this.userSpecified));
+  } catch (e) {} // just in case of DOM_22 error, makes me so sad to use this :(
+  $('#addthislayers').trigger('init');
+};
+
+addthislayers.clear = function () {
+  addthislayers.userSpecified = [];
+  localStorage.removeItem('addthislayers');
+  var length = addthislayers.length;
+  for (var i = 0; i < length; i++) {
+    if (addthislayers[i].group === 'Custom') {
+      addthislayers.splice(i, 1);
+      length--;
+    }
+  }
+  // force a refresh?
+  $('#addthislayers').trigger('init');
 };
 
 var addthisloaders = [

@@ -1,3 +1,7 @@
+# About This Fork
+
+This fork adds script and html insertion for quickly creating tests of AddThis social plugins.
+
 # JS Bin
 
 JS Bin is an open source collaborative web development debugging tool.
