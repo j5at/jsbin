@@ -4,7 +4,10 @@ var addthiselements = {
   "<tb>": '<div class="addthis_toolbox">',
   "</tb>": '</div>',
   "<bc>": '<a class="addthis_button_compact"></a>',
-  "<bp>": '<a class="addthis_button_preferred"></a>'
+  "<bp>": '<a class="addthis_button_preferred"></a>',
+  "<b:f>": '<a class="addthis_button_facebook"></a>',
+  "<b:t>": '<a class="addthis_button_twitter"></a>',
+  "<b:li>": '<a class="addthis_button_linkedin"></a>'
 };
 
 var addthisblocks = [
